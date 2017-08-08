@@ -1,10 +1,18 @@
 import {Injectable} from "@angular/core";
 import {AngularFireAuth} from 'angularfire2/auth';
+import {AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database';
 
 import * as firebase from 'firebase/app';
 @Injectable()
 export class AF {
-  constructor(public af: AngularFireAuth) {}
+  public messages: FirebaseListObservable<any>;
+  public users: FirebaseListObservable<any>;
+  public displayName: string;
+  public email: string;
+
+  constructor(public af: AngularFireAuth, public db: AngularFireDatabase) {
+      this.messages = this.db.list('messages');
+  }
   /**
    * Logs in the user
    * @returns {firebase.Promise<FirebaseAuthState>}
@@ -21,5 +29,18 @@ export class AF {
    */
   logout() {
     return this.af.auth.signOut();
+  }
+  /**
+  * Saves a message to the Firebase Realtime Database
+  * @param text
+  */
+  sendMessage(text){
+      var message = {
+          message: text,
+          displayName: this.displayName,
+          email: this.email,
+          timestamp: Date.now()
+      };
+      this.messages.push(message);
   }
 }

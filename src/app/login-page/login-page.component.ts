@@ -14,6 +14,7 @@ export class LoginPageComponent {
 
     login() {
         this.afService.loginWithGoogle().then((data) => {
+            // res => console.log(res);
             this.router.navigate(['']);
         })
     }

@@ -1,9 +1,54 @@
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
-            <h1>
-                home-page works!
-            </h1>
+        <div class="col-md-8 col-md-offset-2">
+            <div #scrollMe class="bs-example" id="messages">
+                <!--
+                    This is where we bind a loop to our messages. Remember that
+                    the messages object is a FirebaseListObservable. This means
+                    it will asynchronously stay current with the db. Any changes
+                     to the messages in the database will immediately be reflected
+                     here. We have to have to specify this relationship in the
+                     loop by adding async.
+                 -->
+                 <div class="bs-example" id=messages>
+
+
+                <div *ngFor="let message of messages | async">
+
+                    <!--
+                        In the CSS I have classes called you and me. Which puts
+                        the correct css for the chat bubble depending on if it
+                        was the active users or not. Using the syntax
+                        [class.you]="isYou(message.email)" binds the presence of
+                         the class you to the truthfulness of the function isYou.
+                         To make both isYou and isMe work we need to add those
+                         functions to home-page.component.ts. They return true
+                         or false if the email on the message posted matches the
+                          email of the current user.
+                    -->
+                    <div class="bubble" [class.you]="isYou(message.email)" [class.me]="isMe(message.email)">
+                        <p>{{message.message}}</p>
+                        <div class="author">
+                            {{message.displayName}} | {{message.timestamp | date: "MM/dd/yy hh:mm a"}}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+            <!-- CAN NOT BE A FORM HERE -->
+            <figure class="highlight">
+                <!--
+                We two way bind the input to the textarea to the variable newMessage
+                by doing this [(ngModel)]="newMessage". We also want the user to
+                 be able to submit their message by hitting enter, so we add the
+                  event keyup.enter to trigger our sendMessage function. We also
+                   bind the click event on the SEND button to trigger the sendMessage
+                   function also.
+                 -->
+                <input type="textarea" class="message-text" [(ngModel)]="newMessage" (keyup.enter)="sendMessage()">
+                <a class="send-message" (click)="sendMessage()">SEND</a>
+            </figure>
         </div>
     </div>
 </div>

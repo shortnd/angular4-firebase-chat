@@ -23,6 +23,9 @@ export class AppComponent {
                 }
                  else {
                      console.log("Successfully Logged in.");
+                     // Set the Display Name and Email so we can attribute messages to them
+                     this.afService.displayName = auth.displayName;
+                     this.afService.email = auth.email;
                      this.isLoggedIn = true;
                      this.router.navigate(['']);
                  }
